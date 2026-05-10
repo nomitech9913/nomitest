@@ -1,0 +1,16 @@
+{
+  "name": "nomitech-website",
+  "version": "1.0.0",
+  "description": "Static website for Nomitech",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve .",
+    "build": "echo 'No build step required'"
+  },
+  "dependencies": {
+    "serve": "^14.2.4"
+  },
+  "engines": {
+    "node": ">=14"
+  }
+}

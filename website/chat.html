@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages | Discord Style</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="style.css" rel="stylesheet">
+    <style>
+        :root {
+            --discord-bg: #313338;
+            --discord-sidebar: #2B2D31;
+            --discord-servers: #1E1F22;
+            --discord-text: #DBDEE1;
+            --discord-header: #F2F3F5;
+            --discord-hover: #35373C;
+            --discord-active: #3F4147;
+            --discord-accent: #5865F2;
+        }
+
+        body {
+            background-color: var(--discord-servers);
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .discord-wrapper {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Server Sidebar */
+        .server-sidebar {
+            width: 72px;
+            background-color: var(--discord-servers);
+            padding: 12px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .server-icon {
+            width: 48px;
+            height: 48px;
+            background-color: var(--discord-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            color: var(--discord-text);
+            text-decoration: none;
+        }
+
+        .server-icon:hover, .server-icon.active {
+            border-radius: 30%;
+            background-color: var(--discord-accent);
+            color: white;
+        }
+
+        .server-icon::before {
+            content: '';
+            position: absolute;
+            left: -12px;
+            width: 4px;
+            height: 8px;
+            background-color: white;
+            border-radius: 0 4px 4px 0;
+            transition: all 0.2s ease;
+            opacity: 0;
+        }
+
+        .server-icon.active::before {
+            height: 40px;
+            opacity: 1;
+            left: 0;
+        }
+
+        /* DM Sidebar */
+        .dm-sidebar {
+            width: 240px;
+            background-color: var(--discord-sidebar);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            height: 48px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+            font-weight: 600;
+            color: white;
+        }
+
+        .sidebar-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+        }
+
+        .sidebar-category {
+            padding: 18px 8px 4px 8px;
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: 700;
+            color: #949BA4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dm-item {
+            padding: 8px;
+            margin: 2px 0;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            color: #949BA4;
+            transition: all 0.1s;
+            text-decoration: none;
+        }
+
+        .dm-item:hover {
+            background-color: var(--discord-hover);
+            color: var(--discord-text);
+        }
+
+        .dm-item.active {
+            background-color: var(--discord-active);
+            color: white;
+        }
+
+        .dm-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .status-dot {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 3px solid var(--discord-sidebar);
+        }
+
+        .status-online { background-color: #23A559; }
+
+        /* Chat Area */
+        .chat-area {
+            flex: 1;
+            background-color: var(--discord-bg);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            height: 48px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+            color: white;
+            font-weight: 600;
+            gap: 8px;
+        }
+
+        .message-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 0;
+        }
+
+        .message-group {
+            padding: 2px 16px;
+            display: flex;
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .message-group:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+
+        .message-content {
+            flex: 1;
+        }
+
+        .message-author {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 2px;
+        }
+
+        .author-name {
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .author-name:hover {
+            text-decoration: underline;
+        }
+
+        .message-time {
+            font-size: 12px;
+            color: #949BA4;
+        }
+
+        .message-text {
+            color: var(--discord-text);
+            line-height: 1.4;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .chat-input-wrapper {
+            padding: 0 16px 24px 16px;
+        }
+
+        .chat-input-box {
+            background-color: #383A40;
+            border-radius: 8px;
+            padding: 11px 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .chat-input {
+            background: transparent;
+            border: none;
+            color: var(--discord-text);
+            flex: 1;
+            outline: none;
+        }
+
+        .chat-input::placeholder {
+            color: #6D6F78;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #1A1B1E; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #141517; }
+
+        .navbar { display: none !important; } /* Hide global navbar in chat view */
+    </style>
+</head>
+<body>
+
+    <div class="discord-wrapper">
+        <!-- Servers Sidebar -->
+        <div class="server-sidebar">
+            <a href="index.html" class="server-icon" title="Home">
+                <i class="bi bi-house-fill fs-4"></i>
+            </a>
+            <div style="width: 32px; height: 2px; background: #35373C; border-radius: 1px;"></div>
+            <div class="server-icon active" id="dmServerIcon" title="Direct Messages">
+                <i class="bi bi-chat-dots-fill fs-4"></i>
+            </div>
+            <a href="users.html" class="server-icon" title="Community">
+                <i class="bi bi-people-fill fs-4"></i>
+            </a>
+        </div>
+
+        <!-- DM Sidebar -->
+        <div class="dm-sidebar">
+            <div class="sidebar-header">
+                Direct Messages
+            </div>
+            <div class="sidebar-scroll">
+                <div class="dm-item active" id="globalChatItem">
+                    <div class="dm-avatar bg-accent d-flex align-items-center justify-content-center">
+                        <i class="bi bi-globe text-white"></i>
+                    </div>
+                    <span>Global Chat</span>
+                </div>
+                
+                <div class="sidebar-category">
+                    Direct Messages
+                    <i class="bi bi-plus-lg small" style="cursor: pointer;"></i>
+                </div>
+                
+                <div id="dmUserList">
+                    <!-- DM Users -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Chat Area -->
+        <div class="chat-area">
+            <div class="chat-header">
+                <i class="bi bi-hash fs-4 text-secondary" id="headerIcon"></i>
+                <span id="chatTitle">global-chat</span>
+            </div>
+
+            <div class="message-list" id="messageList">
+                <!-- Messages -->
+            </div>
+
+            <div class="chat-input-wrapper">
+                <div class="chat-input-box" id="inputContainer">
+                    <i class="bi bi-plus-circle-fill fs-5 text-secondary" style="cursor: pointer;"></i>
+                    <input type="text" class="chat-input" id="messageInput" placeholder="Message #global-chat">
+                    <div class="d-flex gap-3 text-secondary fs-5">
+                        <i class="bi bi-gift-fill"></i>
+                        <i class="bi bi-emoji-smile-fill"></i>
+                    </div>
+                </div>
+                <div id="loginPrompt" class="text-center mt-3 d-none">
+                    <p class="text-secondary small mb-0">You must be signed in to send messages. <a href="index.html" class="text-accent">Sign In</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const messageList = document.getElementById('messageList');
+            const dmUserList = document.getElementById('dmUserList');
+            const messageInput = document.getElementById('messageInput');
+            const chatTitle = document.getElementById('chatTitle');
+            const headerIcon = document.getElementById('headerIcon');
+            const inputContainer = document.getElementById('inputContainer');
+            const loginPrompt = document.getElementById('loginPrompt');
+            const globalChatItem = document.getElementById('globalChatItem');
+
+            const currentUser = localStorage.getItem('currentUser');
+            const users = JSON.parse(localStorage.getItem('users')) || {};
+            
+            let currentChat = { type: 'global', target: null };
+
+            if (!currentUser) {
+                inputContainer.style.opacity = '0.5';
+                messageInput.disabled = true;
+                messageInput.placeholder = "Sign in to chat";
+                loginPrompt.classList.remove('d-none');
+            }
+
+            function populateDMList() {
+                dmUserList.innerHTML = '';
+                Object.keys(users).forEach(uname => {
+                    if (uname === currentUser) return;
+                    
+                    const picUrl = users[uname].profilePic || `https://ui-avatars.com/api/?name=${uname}&background=9CA3AF&color=fff`;
+                    const isActive = (currentChat.type === 'private' && currentChat.target === uname);
+                    
+                    const item = document.createElement('div');
+                    item.className = `dm-item ${isActive ? 'active' : ''}`;
+                    item.innerHTML = `
+                        <div class="dm-avatar">
+                            <img src="${picUrl}" class="w-100 h-100 rounded-circle" style="object-fit: cover;">
+                            <div class="status-dot status-online"></div>
+                        </div>
+                        <span class="text-truncate">${uname}</span>
+                    `;
+                    
+                    item.onclick = () => switchChat('private', uname);
+                    dmUserList.appendChild(item);
+                });
+            }
+
+            function switchChat(type, target = null) {
+                if (type === 'private' && target === currentUser) return;
+                currentChat = { type, target };
+                
+                if (type === 'global') {
+                    chatTitle.textContent = 'global-chat';
+                    headerIcon.className = 'bi bi-hash fs-4 text-secondary';
+                    messageInput.placeholder = 'Message #global-chat';
+                    globalChatItem.classList.add('active');
+                } else {
+                    chatTitle.textContent = target;
+                    headerIcon.className = 'bi bi-at fs-4 text-secondary';
+                    messageInput.placeholder = `Message @${target}`;
+                    globalChatItem.classList.remove('active');
+                }
+                
+                // Update active state in list
+                document.querySelectorAll('.dm-item').forEach(el => {
+                    if (el === globalChatItem) return;
+                    el.classList.toggle('active', type === 'private' && el.querySelector('span').textContent === target);
+                });
+
+                loadMessages();
+            }
+
+            function getDMKey(userA, userB) {
+                const participants = [userA, userB].sort();
+                return `dm_${participants[0]}_${participants[1]}`;
+            }
+
+            function loadMessages() {
+                let messages = [];
+                if (currentChat.type === 'global') {
+                    messages = JSON.parse(localStorage.getItem('globalMessages')) || [];
+                } else {
+                    const key = getDMKey(currentUser, currentChat.target);
+                    messages = JSON.parse(localStorage.getItem(key)) || [];
+                }
+
+                messageList.innerHTML = '';
+                
+                messages.forEach(msg => {
+                    const userPic = users[msg.user]?.profilePic || `https://ui-avatars.com/api/?name=${msg.user}&background=9CA3AF&color=fff`;
+                    const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    
+                    // Rank coloring (approximate Discord colors)
+                    let rankColor = '#fff';
+                    const userBadge = (msg.user.toLowerCase() === 'nomitech') ? 'legend' : users[msg.user]?.badge;
+                    if (userBadge === 'legend') rankColor = '#F1C40F';
+                    else if (userBadge === 'vip') rankColor = '#9B59B6';
+                    else if (userBadge === 'pro') rankColor = '#3498DB';
+
+                    const msgHtml = `
+                        <div class="message-group">
+                            <img src="${userPic}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover; cursor: pointer;" onclick="switchChat('private', '${msg.user}')">
+                            <div class="message-content">
+                                <div class="message-author">
+                                    <span class="author-name" style="color: ${rankColor}" onclick="switchChat('private', '${msg.user}')">${msg.user}</span>
+                                    <span class="message-time">${time}</span>
+                                </div>
+                                <div class="message-text">${msg.text}</div>
+                            </div>
+                        </div>
+                    `;
+                    messageList.insertAdjacentHTML('beforeend', msgHtml);
+                });
+                
+                messageList.scrollTop = messageList.scrollHeight;
+            }
+
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const text = messageInput.value.trim();
+                    if (!text || !currentUser) return;
+
+                    let key = currentChat.type === 'global' ? 'globalMessages' : getDMKey(currentUser, currentChat.target);
+                    const messages = JSON.parse(localStorage.getItem(key)) || [];
+                    
+                    messages.push({
+                        user: currentUser,
+                        text: text,
+                        timestamp: new Date().toISOString()
+                    });
+
+                    if (messages.length > 100) messages.shift();
+                    localStorage.setItem(key, JSON.stringify(messages));
+                    messageInput.value = '';
+                    loadMessages();
+                }
+            });
+
+            globalChatItem.onclick = () => switchChat('global');
+
+            // URL param handling
+            const urlParams = new URLSearchParams(window.location.search);
+            const chatWith = urlParams.get('with');
+            if (chatWith && users[chatWith]) {
+                switchChat('private', chatWith);
+            } else {
+                loadMessages();
+            }
+
+            populateDMList();
+
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'globalMessages' && currentChat.type === 'global') loadMessages();
+                if (currentChat.type === 'private' && e.key === getDMKey(currentUser, currentChat.target)) loadMessages();
+            });
+        });
+    </script>
+</body>
+</html>

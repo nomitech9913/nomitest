@@ -1,0 +1,10 @@
+services:
+  - type: static
+    name: nomitech-website
+    env: static
+    buildCommand: "npm install && npm run build"
+    publishPath: "."
+    headers:
+      - path: "/*"
+        name: "Cache-Control"
+        value: "public, max-age=3600"

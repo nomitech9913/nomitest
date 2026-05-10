@@ -1,0 +1,436 @@
+/* ==========================================================================
+   CSS Variables & Tokens
+   ========================================================================== */
+:root {
+    --bg-main: #0B0F19;
+    --bg-darker: #06090F;
+    --text-main: #F8FAFC;
+    --text-secondary: #94A3B8;
+    --accent-color: #9CA3AF;
+    --accent-glow: rgba(156, 163, 175, 0.5);
+    --accent-color-2: #4B5563;
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.05);
+    --font-heading: 'Outfit', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   Base Styles
+   ========================================================================== */
+body {
+    font-family: var(--font-body);
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+#bg-video {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -2;
+    object-fit: cover;
+}
+
+.video-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(11, 15, 25, 0.7);
+    /* Dark overlay so text is readable */
+    z-index: -1;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.navbar-brand {
+    font-family: var(--font-heading);
+}
+
+.text-secondary {
+    color: var(--text-secondary) !important;
+}
+
+.text-accent {
+    color: var(--accent-color) !important;
+}
+
+.bg-darker {
+    background: rgba(6, 9, 15, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.py-section {
+    padding-top: 100px;
+    padding-bottom: 100px;
+}
+
+.max-w-600 {
+    max-width: 600px;
+}
+
+/* ==========================================================================
+   Typography & Gradients
+   ========================================================================== */
+.text-gradient {
+    background: linear-gradient(135deg, var(--accent-color), var(--accent-color-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.section-title {
+    font-weight: 700;
+    font-size: 2.5rem;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-color), var(--accent-color-2));
+    border-radius: 2px;
+}
+
+.text-center .section-title::after {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.letter-spacing-1 {
+    letter-spacing: 1px;
+}
+
+/* ==========================================================================
+   Navigation
+   ========================================================================== */
+.glass-nav {
+    background: rgba(11, 15, 25, 0.8) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--glass-border);
+    transition: var(--transition);
+}
+
+.navbar-nav .nav-link {
+    color: var(--text-main) !important;
+    font-weight: 500;
+    opacity: 0.8;
+    transition: var(--transition);
+    position: relative;
+    padding: 0.5rem 1rem;
+    margin: 0 0.2rem;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    opacity: 1;
+    color: var(--accent-color) !important;
+}
+
+/* ==========================================================================
+   Hero Section & Animations
+   ========================================================================== */
+.hero-section {
+    min-height: 100vh;
+}
+
+.glow-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: 0;
+    opacity: 0.4;
+    animation: float 10s infinite alternate;
+}
+
+.orb-1 {
+    width: 400px;
+    height: 400px;
+    background: var(--accent-color);
+    top: -100px;
+    right: -100px;
+}
+
+.orb-2 {
+    width: 300px;
+    height: 300px;
+    background: var(--accent-color-2);
+    bottom: 10%;
+    left: -100px;
+    animation-delay: -5s;
+}
+
+@keyframes float {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    100% {
+        transform: translate(-30px, 50px) scale(1.1);
+    }
+}
+
+.type-wrap {
+    display: inline-block;
+    min-height: 1.2em;
+}
+
+.cursor {
+    animation: blink 1s infinite;
+    color: var(--accent-color);
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+/* ==========================================================================
+   Components & Glassmorphism
+   ========================================================================== */
+.bg-glass {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    color: var(--text-main);
+}
+
+.glass-card {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+}
+
+.btn-accent {
+    background: linear-gradient(135deg, var(--accent-color), var(--accent-color-2));
+    color: white;
+    border: none;
+    transition: var(--transition);
+}
+
+.btn-accent:hover {
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px var(--accent-glow);
+}
+
+.shadow-glow {
+    box-shadow: 0 0 20px var(--accent-glow);
+}
+
+/* ==========================================================================
+   Project Cards
+   ========================================================================== */
+.project-card {
+    background: var(--bg-darker);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.project-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(156, 163, 175, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.project-img-placeholder {
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.project-card:hover .project-img-placeholder {
+    transform: scale(1.05);
+}
+
+.gradient-1 {
+    background: linear-gradient(135deg, #374151, #9ca3af);
+}
+
+.gradient-2 {
+    background: linear-gradient(135deg, #1f2937, #6b7280);
+}
+
+.gradient-3 {
+    background: linear-gradient(135deg, #111827, #4b5563);
+}
+
+/* ==========================================================================
+   Forms & Inputs
+   ========================================================================== */
+.custom-input {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    transition: var(--transition);
+}
+
+.custom-input:focus {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    color: var(--text-main);
+}
+
+.custom-input::placeholder {
+    color: rgba(148, 163, 184, 0.5);
+}
+
+/* ==========================================================================
+   Misc & Utilities
+   ========================================================================== */
+.hover-accent {
+    transition: var(--transition);
+}
+
+.hover-accent:hover {
+    color: var(--accent-color) !important;
+    transform: translateY(-3px);
+}
+
+.about-image-wrapper {
+    position: relative;
+    padding: 2rem;
+}
+
+.abstract-shape {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--accent-color), var(--accent-color-2));
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    opacity: 0.2;
+    z-index: 0;
+    animation: morph 8s ease-in-out infinite;
+}
+
+@keyframes morph {
+    0% {
+        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    }
+
+    50% {
+        border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%;
+    }
+
+    100% {
+        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    }
+}
+
+/* ==========================================================================
+   User Profile
+   ========================================================================== */
+.profile-avatar {
+    width: 38px;
+    height: 38px;
+    object-fit: cover;
+    border: 2px solid var(--accent-color);
+}
+
+/* ==========================================================================
+   Theme Swatches & Settings
+   ========================================================================== */
+.theme-swatch {
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--glass-border);
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.theme-swatch:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+.nav-pills .nav-link.active {
+    background-color: var(--accent-color) !important;
+}
+
+/* ==========================================================================
+   Badges
+   ========================================================================== */
+.badge-legend {
+    background: linear-gradient(135deg, #FFD700, #F59E0B) !important;
+    color: #000 !important;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+    border: none;
+}
+
+.badge-vip {
+    background: linear-gradient(135deg, #530ff1, #6D28D9) !important;
+    border: none;
+}
+
+.badge-pro {
+    background: linear-gradient(135deg, #3B82F6, #2563EB) !important;
+    border: none;
+}
+
+.badge-member {
+    background: linear-gradient(135deg, #6B7280, #4B5563) !important;
+    border: none;
+}
+
+/* Status Indicators */
+.status-pulse {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #10B981;
+    border-radius: 50%;
+    box-shadow: 0 0 0 rgba(16, 185, 129, 0.4);
+    animation: statusPulse 2s infinite;
+}
+
+@keyframes statusPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+
+    70% {
+        box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+}
